@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RD Medicine: O Próximo Nível</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* === CSS CUSTOM PROPERTIES === */
+:root {
+  --bg-primary: #0A0D14;
+  --bg-surface: #1A2035;
+  --bg-elevated: #222B42;
+  --accent-gold: #C9A96E;
+  --accent-gold-dim: rgba(201,169,110,0.15);
+  --accent-gold-border: rgba(201,169,110,0.4);
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0AABF;
+  --text-muted: #5A6480;
+  --border-subtle: #2A3A5C;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-quote: 'DM Serif Display', serif;
+  --title-size: clamp(1.5rem, 5vw, 4rem);
+  --h2-size: clamp(1.25rem, 3.5vw, 2.5rem);
+  --h3-size: clamp(1rem, 2.5vw, 1.75rem);
+  --body-size: clamp(0.75rem, 1.5vw, 1.05rem);
+  --small-size: clamp(0.65rem, 1vw, 0.875rem);
+  --slide-padding: clamp(1rem, 4vw, 5rem);
+  --content-gap: clamp(0.5rem, 2vw, 2rem);
+  --element-gap: clamp(0.25rem, 1vw, 1rem);
+  --ease-out-expo: cubic-bezier(0.16,1,0.3,1);
+}
+
+/* === RESET + BASE === */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth;height:100%;overflow-x:hidden;}
+body{background:var(--bg-primary);color:var(--text-primary);font-family:var(--font-body);height:100%;overflow-x:hidden;}
+
+/* === VIEWPORT BASE (from viewport-base.css) === */
+.slide{
+  width:100vw;height:100vh;height:100dvh;
+  overflow:hidden;
+  scroll-snap-align:start;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.slide-content{
+  flex:1;display:flex;flex-direction:column;
+  justify-content:center;
+  max-height:100%;overflow:hidden;
+  padding:var(--slide-padding);
+}
+.card,.container,.content-box{max-width:min(90vw,1000px);max-height:min(80vh,700px);}
+.feature-list,.bullet-list{gap:clamp(0.4rem,1vh,1rem);}
+.feature-list li,.bullet-list li{font-size:var(--body-size);line-height:1.4;}
+
+@media(max-height:700px){
+  :root{--slide-padding:clamp(0.75rem,3vw,2rem);--content-gap:clamp(0.4rem,1.5vw,1rem);--title-size:clamp(1.25rem,4.5vw,2.5rem);--h2-size:clamp(1rem,3vw,1.75rem);}
+}
+@media(max-height:600px){
+  :root{--slide-padding:clamp(0.5rem,2.5vw,1.5rem);--content-gap:clamp(0.3rem,1vw,0.75rem);--title-size:clamp(1.1rem,4vw,2rem);--body-size:clamp(0.7rem,1.2vw,0.95rem);}
+  .nav-dots,.decorative{display:none;}
+}
+@media(max-height:500px){
+  :root{--slide-padding:clamp(0.4rem,2vw,1rem);--title-size:clamp(1rem,3.5vw,1.5rem);--h2-size:clamp(0.9rem,2.5vw,1.25rem);--body-size:clamp(0.65rem,1vw,0.85rem);}
+}
+@media(max-width:600px){
+  :root{--title-size:clamp(1.25rem,7vw,2.5rem);}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.2s!important;}
+  html{scroll-behavior:auto;}
+}
+
+/* === SCROLL REVEAL === */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s var(--ease-out-expo),transform 0.7s var(--ease-out-expo);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:0.1s;}
+.reveal-delay-2{transition-delay:0.2s;}
+.reveal-delay-3{transition-delay:0.3s;}
+.reveal-delay-4{transition-delay:0.4s;}
+.reveal-delay-5{transition-delay:0.5s;}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.7s var(--ease-out-expo),transform 0.7s var(--ease-out-expo);}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-scale{opacity:0;transform:scale(0.92);transition:opacity 0.7s var(--ease-out-expo),transform 0.7s var(--ease-out-expo);}
+.reveal-scale.visible{opacity:1;transform:scale(1);}
+
+/* === PROGRESS BAR === */
+#progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent-gold);z-index:1000;transition:width 0.1s linear;width:0;}
+
+/* === FIXED HEADER === */
+#site-header{
+  position:fixed;top:0;left:0;right:0;
+  z-index:900;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.25rem clamp(1.5rem,4vw,4rem);
+  background:linear-gradient(to bottom,rgba(10,13,20,0.95) 0%,transparent 100%);
+  pointer-events:none;
+}
+#site-header .logo{font-family:var(--font-display);font-size:clamp(0.9rem,1.5vw,1.1rem);font-weight:700;letter-spacing:0.05em;color:var(--text-primary);}
+#site-header .cycle{font-family:var(--font-body);font-size:clamp(0.6rem,1vw,0.75rem);font-weight:300;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);}
+
+/* === DOT NAVIGATION === */
+#dot-nav{
+  position:fixed;right:clamp(1rem,2.5vw,2rem);top:50%;transform:translateY(-50%);
+  z-index:900;display:flex;flex-direction:column;gap:0.75rem;
+}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--border-subtle);
+  cursor:pointer;transition:all 0.3s ease;
+  position:relative;
+}
+.dot:hover,.dot.active{background:var(--accent-gold);transform:scale(1.4);}
+.dot::after{
+  content:attr(data-label);
+  position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%);
+  white-space:nowrap;font-size:0.7rem;font-family:var(--font-body);
+  color:var(--accent-gold);background:rgba(10,13,20,0.9);
+  padding:0.2rem 0.5rem;border-radius:3px;border:1px solid var(--accent-gold-border);
+  opacity:0;pointer-events:none;transition:opacity 0.2s;
+}
+.dot:hover::after{opacity:1;}
+
+/* === GOLD DIVIDER === */
+.gold-line{width:80px;height:2px;background:var(--accent-gold);margin:1.5rem 0;}
+.gold-line-center{margin:1.5rem auto;}
+
+/* === SECTION LABEL === */
+.section-label{
+  font-family:var(--font-body);font-size:clamp(0.6rem,1vw,0.72rem);
+  font-weight:600;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--accent-gold);margin-bottom:0.5rem;
+}
+
+/* === QUOTE BLOCK === */
+.quote-block{
+  background:var(--bg-surface);border-left:4px solid var(--accent-gold);
+  padding:clamp(1rem,2vw,1.5rem) clamp(1.25rem,2.5vw,2rem);
+  border-radius:0 6px 6px 0;
+}
+.quote-block p{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.9rem,2vw,1.2rem);line-height:1.6;color:var(--text-primary);}
+.quote-block cite{display:block;margin-top:0.75rem;font-family:var(--font-body);font-size:var(--small-size);font-style:normal;color:var(--accent-gold);letter-spacing:0.1em;}
+
+/* ============================================================
+   SEÇÃO 01 — HERO / CAPA
+   ============================================================ */
+#s01{
+  background:var(--bg-primary);
+  justify-content:center;align-items:flex-start;
+}
+.hero-mesh{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 15% 85%,rgba(201,169,110,0.08) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 10%,rgba(42,58,92,0.6) 0%,transparent 60%),
+    radial-gradient(ellipse at 50% 50%,rgba(26,32,53,0.4) 0%,transparent 70%);
+  animation:meshDrift 14s ease-in-out infinite alternate;
+}
+@keyframes meshDrift{
+  0%{background:radial-gradient(ellipse at 15% 85%,rgba(201,169,110,0.08) 0%,transparent 55%),radial-gradient(ellipse at 85% 10%,rgba(42,58,92,0.6) 0%,transparent 60%),radial-gradient(ellipse at 50% 50%,rgba(26,32,53,0.4) 0%,transparent 70%);}
+  100%{background:radial-gradient(ellipse at 25% 70%,rgba(201,169,110,0.12) 0%,transparent 55%),radial-gradient(ellipse at 75% 20%,rgba(42,58,92,0.7) 0%,transparent 60%),radial-gradient(ellipse at 55% 55%,rgba(26,32,53,0.5) 0%,transparent 70%);}
+}
+.hero-content{
+  position:relative;z-index:1;
+  padding:var(--slide-padding);
+  padding-top:calc(var(--slide-padding) + 4rem);
+  max-width:min(90vw,900px);
+}
+.hero-main-title{
+  font-family:var(--font-display);
+  font-size:clamp(3.5rem,10vw,8rem);
+  font-weight:900;line-height:0.95;letter-spacing:-0.02em;
+  color:var(--text-primary);
+  margin-bottom:0.3em;
+}
+.hero-main-title span{display:block;}
+.hero-sub{
+  font-family:var(--font-body);font-weight:600;
+  font-size:clamp(1rem,3vw,2rem);
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--text-primary);margin-bottom:1.5rem;
+}
+.hero-descriptor{font-family:var(--font-body);font-weight:300;font-size:clamp(0.85rem,1.8vw,1.15rem);color:var(--text-secondary);margin-bottom:1rem;max-width:480px;}
+.hero-cycle{font-family:var(--font-body);font-weight:600;font-size:clamp(0.6rem,1vw,0.75rem);letter-spacing:0.3em;text-transform:uppercase;color:var(--accent-gold);}
+.scroll-arrow{
+  position:absolute;bottom:2.5rem;right:4rem;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:0.4rem;
+  animation:arrowBob 2.2s ease-in-out infinite;
+}
+@keyframes arrowBob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+.scroll-arrow svg{width:24px;height:24px;opacity:0.5;}
+
+/* ============================================================
+   SEÇÃO 02 — CRESCER RÁPIDO EXIGE SUSTENTAÇÃO
+   ============================================================ */
+#s02{background:var(--bg-primary);}
+#s02::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.4;pointer-events:none;
+}
+.s02-layout{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:40% 1fr;
+  gap:clamp(2rem,4vw,5rem);
+  align-items:start;
+  height:100%;padding:var(--slide-padding);
+  padding-top:calc(var(--slide-padding) + 4.5rem);
+  overflow:hidden;
+}
+.s02-left h2{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(1.5rem,4vw,2.8rem);
+  line-height:1.1;color:var(--text-primary);margin-bottom:1.5rem;
+}
+.s02-right{display:flex;flex-direction:column;gap:0;padding-top:0.5rem;}
+.s02-point{
+  display:grid;grid-template-columns:3rem 1fr;
+  gap:1rem;align-items:start;
+  padding:clamp(0.75rem,1.5vw,1.2rem) 0;
+  border-bottom:1px solid var(--border-subtle);
+}
+.s02-point:first-child{border-top:1px solid var(--border-subtle);}
+.s02-num{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--accent-gold);padding-top:0.15rem;}
+.s02-text{font-size:var(--body-size);font-weight:300;line-height:1.55;color:var(--text-secondary);}
+.s02-text strong{color:var(--text-primary);font-weight:600;}
+
+/* ============================================================
+   SEÇÃO 03 — METODOLOGIA BRAND FOR EQUITY
+   ============================================================ */
+#s03{background:linear-gradient(to bottom,var(--bg-primary),var(--bg-surface));}
+.s03-header{text-align:center;padding:var(--slide-padding);padding-bottom:0;padding-top:calc(var(--slide-padding) + 4.5rem);}
+.s03-header h2{font-family:var(--font-display);font-weight:700;font-size:var(--h2-size);color:var(--text-primary);margin-bottom:0.5rem;}
+.s03-header p{font-family:var(--font-body);font-weight:300;font-size:var(--body-size);color:var(--text-secondary);}
+.s03-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(0.75rem,1.5vw,1.5rem);
+  padding:clamp(1rem,2vw,2rem) var(--slide-padding);
+  flex:1;overflow:hidden;
+}
+.method-card{
+  background:var(--bg-surface);border-radius:8px;
+  padding:clamp(1rem,2vw,1.75rem);
+  position:relative;overflow:hidden;
+  transition:transform 0.3s ease,box-shadow 0.3s ease;
+  border-top:2px solid transparent;
+  display:flex;flex-direction:column;gap:0.75rem;
+}
+.method-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--accent-gold);transform:scaleX(0);transform-origin:left;
+  transition:transform 0.4s var(--ease-out-expo);
+}
+.method-card:hover::before{transform:scaleX(1);}
+.method-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(201,169,110,0.12);}
+.method-num{
+  position:absolute;bottom:-0.5rem;right:0.5rem;
+  font-family:var(--font-display);font-size:clamp(3rem,6vw,5rem);font-weight:900;
+  color:var(--accent-gold);opacity:0.08;line-height:1;pointer-events:none;
+  transition:opacity 0.3s;
+}
+.method-card:hover .method-num{opacity:0.14;}
+.method-icon{width:32px;height:32px;color:var(--accent-gold);}
+.method-label{font-family:var(--font-body);font-size:clamp(0.65rem,1vw,0.75rem);font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent-gold);}
+.method-title{font-family:var(--font-display);font-size:clamp(1rem,2vw,1.3rem);font-weight:700;color:var(--text-primary);}
+.method-desc{font-size:clamp(0.7rem,1.2vw,0.85rem);font-weight:300;line-height:1.5;color:var(--text-secondary);}
+.s03-footer{padding:0 var(--slide-padding) clamp(0.75rem,1.5vw,1.5rem);text-align:center;}
+.s03-footer p{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.8rem,1.5vw,1rem);color:var(--text-secondary);}
+
+/* ============================================================
+   SEÇÃO 04 — LIDERANÇA EXECUTIVA
+   ============================================================ */
+#s04{background:var(--bg-primary);}
+.s04-layout{
+  display:grid;grid-template-columns:55% 45%;
+  height:100%;overflow:hidden;
+}
+.s04-left{
+  padding:var(--slide-padding);
+  padding-top:calc(var(--slide-padding) + 5rem);
+  display:flex;flex-direction:column;justify-content:center;
+  gap:clamp(0.75rem,1.5vw,1.5rem);
+  overflow:hidden;
+}
+.s04-left h2{font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,3.5vw,2.5rem);line-height:1.1;color:var(--text-primary);}
+.s04-label{font-family:var(--font-body);font-size:clamp(0.6rem,1vw,0.72rem);font-weight:600;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent-gold);}
+.s04-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0.5rem 0;}
+.s04-pillar{padding:clamp(0.75rem,1.5vw,1.25rem);border-right:1px solid var(--border-subtle);}
+.s04-pillar:last-child{border-right:none;}
+.s04-pillar h4{font-family:var(--font-body);font-size:clamp(0.65rem,1vw,0.8rem);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);margin-bottom:0.4rem;}
+.s04-pillar p{font-size:clamp(0.65rem,1.2vw,0.85rem);font-weight:300;line-height:1.5;color:var(--text-secondary);}
+.s04-right{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--bg-surface) 0%,var(--bg-primary) 100%);
+}
+.s04-circle-wrap{position:relative;width:clamp(180px,22vw,280px);height:clamp(180px,22vw,280px);}
+.s04-circle-bg{
+  width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(201,169,110,0.25),rgba(201,169,110,0.05) 60%,transparent 80%);
+  border:1px solid var(--accent-gold-border);
+  animation:rotateSlow 20s linear infinite;
+}
+@keyframes rotateSlow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.s04-circle-text{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0.25rem;
+}
+.s04-circle-text span:first-child{font-family:var(--font-body);font-size:clamp(0.55rem,0.9vw,0.68rem);font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);}
+.s04-circle-text span:last-child{font-family:var(--font-display);font-size:clamp(0.9rem,1.8vw,1.3rem);font-weight:700;color:var(--text-primary);text-align:center;line-height:1.2;}
+.s04-quote{padding:clamp(1rem,2vw,1.5rem) var(--slide-padding);background:var(--bg-surface);border-top:1px solid var(--border-subtle);}
+.s04-quote p{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.75rem,1.5vw,1rem);color:var(--text-secondary);text-align:center;}
+
+/* ============================================================
+   SEÇÃO 05 — LIDERANÇA INTEGRADA (SPOKE DIAGRAM)
+   ============================================================ */
+#s05{background:var(--bg-primary);}
+.s05-layout{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;height:100%;
+  padding:var(--slide-padding);
+  padding-top:calc(var(--slide-padding) + 4.5rem);
+  gap:clamp(0.75rem,1.5vw,1.5rem);
+}
+.s05-title{text-align:center;}
+.s05-title h2{font-family:var(--font-display);font-weight:700;font-size:var(--h2-size);color:var(--text-primary);}
+.spoke-diagram{position:relative;width:clamp(280px,45vw,500px);height:clamp(280px,40vh,420px);flex-shrink:0;}
+.spoke-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:clamp(80px,12vw,120px);height:clamp(80px,12vw,120px);
+  border-radius:50%;background:var(--bg-surface);
+  border:2px solid var(--accent-gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;z-index:2;
+  box-shadow:0 0 40px rgba(201,169,110,0.2);
+}
+.spoke-center span{font-family:var(--font-body);font-size:clamp(0.45rem,0.8vw,0.6rem);font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-gold);line-height:1.3;}
+.spoke-node{
+  position:absolute;
+  width:clamp(70px,10vw,100px);height:clamp(70px,10vw,100px);
+  border-radius:50%;background:var(--bg-elevated);
+  border:1px solid var(--border-subtle);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;cursor:pointer;
+  transition:all 0.35s var(--ease-out-expo);
+  overflow:visible;
+}
+.spoke-node:hover{background:var(--bg-surface);border-color:var(--accent-gold);transform:scale(1.1);}
+.spoke-node-label{font-family:var(--font-body);font-size:clamp(0.5rem,0.85vw,0.65rem);font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-primary);line-height:1.2;}
+.spoke-node-desc{
+  position:absolute;left:50%;transform:translateX(-50%);
+  top:calc(100% + 8px);
+  background:rgba(26,32,53,0.97);border:1px solid var(--accent-gold-border);
+  border-radius:6px;padding:0.5rem 0.75rem;
+  width:max-content;max-width:180px;
+  font-size:clamp(0.55rem,0.9vw,0.7rem);font-weight:300;line-height:1.4;color:var(--text-secondary);
+  opacity:0;pointer-events:none;transition:opacity 0.2s;z-index:10;
+}
+.spoke-node:hover .spoke-node-desc{opacity:1;}
+/* Node positions */
+.spoke-node[data-pos="top"]{top:0;left:50%;transform:translateX(-50%);}
+.spoke-node[data-pos="right"]{top:50%;right:0;transform:translateY(-50%);}
+.spoke-node[data-pos="bottom"]{bottom:0;left:50%;transform:translateX(-50%);}
+.spoke-node[data-pos="left"]{top:50%;left:0;transform:translateY(-50%);}
+.spoke-node[data-pos="top"]:hover{transform:translateX(-50%) scale(1.1);}
+.spoke-node[data-pos="right"]:hover{transform:translateY(-50%) scale(1.1);}
+.spoke-node[data-pos="bottom"]:hover{transform:translateX(-50%) scale(1.1);}
+.spoke-node[data-pos="left"]:hover{transform:translateY(-50%) scale(1.1);}
+.spoke-lines{position:absolute;inset:0;pointer-events:none;z-index:0;}
+.s05-quote{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.75rem,1.4vw,0.95rem);color:var(--text-secondary);text-align:center;max-width:600px;}
+
+/* ============================================================
+   SEÇÃO 06 — ECOSSISTEMA RD
+   ============================================================ */
+#s06{background:linear-gradient(to bottom,var(--bg-primary),var(--bg-surface));}
+.s06-header{text-align:center;padding:var(--slide-padding);padding-bottom:1rem;padding-top:calc(var(--slide-padding) + 4.5rem);}
+.s06-header h2{font-family:var(--font-display);font-weight:700;font-size:var(--h2-size);color:var(--text-primary);}
+.s06-header p{font-size:var(--body-size);font-weight:300;color:var(--text-secondary);margin-top:0.3rem;}
+.eco-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:clamp(0.75rem,1.5vw,1.25rem);
+  padding:0 var(--slide-padding);flex:1;overflow:hidden;
+}
+.eco-card{
+  background:var(--bg-surface);border-radius:10px;
+  padding:clamp(1rem,2vw,1.5rem);
+  display:flex;flex-direction:column;gap:0.75rem;
+  border:1px solid var(--border-subtle);
+  transition:box-shadow 0.3s ease,border-color 0.3s ease,transform 0.3s ease;
+}
+.eco-card:hover{box-shadow:0 8px 32px rgba(201,169,110,0.15);border-color:var(--accent-gold-border);transform:translateY(-3px);}
+.eco-icon{width:36px;height:36px;color:var(--accent-gold);}
+.eco-role{font-family:var(--font-body);font-size:clamp(0.55rem,0.9vw,0.68rem);font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);}
+.eco-name{font-family:var(--font-display);font-size:clamp(1rem,2vw,1.4rem);font-weight:700;color:var(--text-primary);}
+.eco-desc{font-size:clamp(0.7rem,1.2vw,0.85rem);font-weight:300;line-height:1.5;color:var(--text-secondary);}
+.s06-footer{padding:clamp(0.5rem,1vw,1rem) var(--slide-padding);text-align:center;}
+.s06-footer p{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.7rem,1.3vw,0.9rem);color:var(--text-muted);}
+
+/* ============================================================
+   SEÇÃO 07 — LABrand: O CÉREBRO DA OPERAÇÃO
+   ============================================================ */
+#s07{background:var(--bg-primary);}
+.s07-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);
+  background-size:48px 48px;
+  background-color:#0D1120;
+}
+.s07-layout{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(2rem,4vw,5rem);
+  height:100%;padding:var(--slide-padding);
+  padding-top:calc(var(--slide-padding) + 4.5rem);
+  overflow:hidden;
+}
+.s07-left{display:flex;flex-direction:column;gap:clamp(0.75rem,1.5vw,1.25rem);justify-content:center;overflow:hidden;}
+.s07-left h2{font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,3.5vw,2.5rem);color:var(--text-primary);line-height:1.1;}
+.s07-activation{
+  font-family:var(--font-body);font-size:clamp(0.6rem,1vw,0.72rem);
+  font-weight:600;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--accent-gold);padding:0.4rem 0.75rem;
+  background:var(--accent-gold-dim);border:1px solid var(--accent-gold-border);
+  border-radius:3px;display:inline-block;align-self:flex-start;
+}
+.s07-desc{font-size:var(--body-size);font-weight:300;line-height:1.55;color:var(--text-secondary);}
+.labrand-caps{display:flex;flex-direction:column;gap:clamp(0.5rem,1vw,0.9rem);}
+.labrand-cap{display:flex;gap:0.75rem;align-items:flex-start;}
+.labrand-cap-icon{width:20px;height:20px;color:var(--accent-gold);flex-shrink:0;margin-top:0.1rem;}
+.labrand-cap-text strong{font-size:clamp(0.75rem,1.3vw,0.9rem);font-weight:600;color:var(--text-primary);display:block;margin-bottom:0.2rem;}
+.labrand-cap-text span{font-size:clamp(0.65rem,1.1vw,0.8rem);font-weight:300;color:var(--text-secondary);}
+.s07-right{display:flex;align-items:center;justify-content:center;overflow:hidden;}
+/* Dashboard mockup */
+.dashboard-mock{
+  width:100%;max-width:min(100%,420px);
+  background:#0E1525;border-radius:10px;
+  border:1px solid var(--border-subtle);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  overflow:hidden;font-size:0;
+}
+.dash-header{
+  background:#141C30;padding:0.6rem 0.85rem;
+  display:flex;align-items:center;gap:0.5rem;
+  border-bottom:1px solid var(--border-subtle);
+}
+.dash-dots{display:flex;gap:0.3rem;}
+.dash-dot{width:8px;height:8px;border-radius:50%;}
+.dash-dot.r{background:#FF5F57;}.dash-dot.y{background:#FFBD2E;}.dash-dot.g{background:#28CA41;}
+.dash-title{font-size:0.65rem;font-family:var(--font-body);color:var(--text-muted);margin-left:0.5rem;letter-spacing:0.05em;}
+.dash-body{display:flex;height:clamp(160px,22vh,220px);}
+.dash-sidebar{
+  width:130px;background:#0C1220;border-right:1px solid var(--border-subtle);
+  padding:0.75rem 0;display:flex;flex-direction:column;gap:0.15rem;flex-shrink:0;
+}
+.dash-nav-item{
+  padding:0.4rem 0.85rem;font-size:0.6rem;font-family:var(--font-body);
+  color:var(--text-muted);cursor:default;letter-spacing:0.05em;
+  transition:all 0.2s;white-space:nowrap;overflow:hidden;
+}
+.dash-nav-item.active{color:var(--accent-gold);background:var(--accent-gold-dim);border-left:2px solid var(--accent-gold);}
+.dash-main{flex:1;padding:0.75rem;display:flex;flex-direction:column;gap:0.6rem;}
+.dash-row{display:flex;gap:0.5rem;}
+.dash-card-sm{
+  flex:1;background:var(--bg-surface);border-radius:5px;
+  padding:0.5rem;border:1px solid var(--border-subtle);
+}
+.dash-card-sm .label{font-size:0.55rem;font-family:var(--font-body);color:var(--text-muted);letter-spacing:0.08em;text-transform:uppercase;}
+.dash-card-sm .val{font-size:0.9rem;font-family:var(--font-display);font-weight:700;color:var(--text-primary);margin-top:0.15rem;}
+.dash-card-sm .sub{font-size:0.5rem;color:var(--accent-gold);font-family:var(--font-body);}
+.dash-progress{background:var(--bg-surface);border-radius:5px;padding:0.5rem;border:1px solid var(--border-subtle);}
+.dash-progress .label{font-size:0.55rem;font-family:var(--font-body);color:var(--text-muted);margin-bottom:0.35rem;text-transform:uppercase;letter-spacing:0.08em;}
+.dash-bar-wrap{background:rgba(255,255,255,0.06);border-radius:3px;height:5px;overflow:hidden;margin-bottom:0.25rem;}
+.dash-bar{height:100%;border-radius:3px;background:linear-gradient(to right,var(--accent-gold),rgba(201,169,110,0.5));}
+.dash-bar-label{font-size:0.5rem;font-family:var(--font-body);color:var(--text-muted);display:flex;justify-content:space-between;}
+
+/* ============================================================
+   SEÇÃO 08 — ROADMAP SEMESTRE 01
+   ============================================================ */
+#s08{background:var(--bg-primary);}
+.s08-layout{display:flex;flex-direction:column;height:100%;padding:var(--slide-padding);padding-top:calc(var(--slide-padding) + 4.5rem);gap:clamp(0.5rem,1vw,1rem);overflow:hidden;}
+.roadmap-header{text-align:center;flex-shrink:0;}
+.roadmap-header h2{font-family:var(--font-display);font-weight:700;font-size:var(--h2-size);color:var(--text-primary);}
+.timeline-wrap{position:relative;flex:1;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+.timeline-line{
+  position:absolute;top:50%;left:0;right:0;height:2px;
+  background:linear-gradient(to right,var(--accent-gold) 0%,rgba(201,169,110,0.3) 100%);
+  transform:translateY(-50%);z-index:0;
+}
+.timeline-months{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  position:relative;z-index:1;
+  height:100%;align-items:center;
+}
+.timeline-month{display:flex;flex-direction:column;align-items:center;gap:0;}
+.tm-card-top,.tm-card-bot{
+  background:var(--bg-surface);border-radius:6px;
+  padding:clamp(0.4rem,1vw,0.75rem);width:90%;
+  border:1px solid var(--border-subtle);
+}
+.tm-card-top{margin-bottom:auto;align-self:flex-end;}
+.tm-card-bot{margin-top:auto;align-self:flex-start;}
+.tm-badge{font-size:0.5rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;padding:0.15rem 0.35rem;border-radius:2px;margin-bottom:0.3rem;display:inline-block;}
+.tm-badge.fundacao{background:rgba(42,58,92,0.8);color:#7B9FC9;border:1px solid #2A3A5C;}
+.tm-badge.construcao{background:rgba(34,43,66,0.8);color:#9BB5D8;border:1px solid #3A4A6C;}
+.tm-badge.ativacao{background:rgba(201,169,110,0.1);color:var(--accent-gold);border:1px solid var(--accent-gold-border);}
+.tm-badge.governanca{background:rgba(201,169,110,0.18);color:var(--accent-gold);border:1px solid rgba(201,169,110,0.5);}
+.tm-month-num{
+  width:clamp(28px,4vw,36px);height:clamp(28px,4vw,36px);
+  border-radius:50%;background:var(--bg-primary);
+  border:2px solid var(--accent-gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-body);font-size:clamp(0.55rem,1vw,0.72rem);font-weight:600;
+  color:var(--accent-gold);flex-shrink:0;z-index:1;
+}
+.tm-card-title{font-size:clamp(0.6rem,1vw,0.75rem);font-weight:600;color:var(--text-primary);margin-bottom:0.2rem;}
+.tm-card-text{font-size:clamp(0.55rem,0.9vw,0.68rem);font-weight:300;color:var(--text-secondary);line-height:1.35;}
+.roadmap-result{
+  background:var(--bg-surface);border:1px solid var(--accent-gold-border);
+  border-radius:6px;padding:clamp(0.5rem,1vw,0.85rem) clamp(0.75rem,1.5vw,1.25rem);
+  flex-shrink:0;
+}
+.roadmap-result p{font-size:clamp(0.65rem,1.2vw,0.82rem);font-weight:300;line-height:1.5;color:var(--text-secondary);}
+.roadmap-result strong{color:var(--accent-gold);}
+.roadmap-quote{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.65rem,1.1vw,0.8rem);color:var(--text-muted);text-align:center;flex-shrink:0;}
+
+/* ============================================================
+   SEÇÃO 09 — ROADMAP SEMESTRE 02
+   ============================================================ */
+#s09{background:linear-gradient(to bottom,var(--bg-primary),#0D1120);}
+
+/* ============================================================
+   SEÇÃO 10 — ATIVOS ESTRATÉGICOS
+   ============================================================ */
+#s10{background:var(--bg-primary);}
+.s10-layout{
+  display:flex;flex-direction:column;height:100%;
+  padding:var(--slide-padding);padding-top:calc(var(--slide-padding) + 4.5rem);
+  gap:clamp(0.5rem,1vw,1rem);overflow:hidden;
+}
+.s10-header{flex-shrink:0;}
+.s10-header h2{font-family:var(--font-display);font-weight:700;font-size:var(--h2-size);color:var(--text-primary);}
+.assets-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:clamp(0.75rem,1.5vw,1.25rem);
+  flex:1;overflow:hidden;
+}
+.asset-card{
+  background:var(--bg-surface);border-radius:8px;
+  padding:clamp(0.75rem,1.5vw,1.25rem);
+  border-left:4px solid transparent;
+  position:relative;display:flex;flex-direction:column;gap:0.5rem;
+  overflow:hidden;transition:transform 0.3s ease;
+}
+.asset-card:hover{transform:translateX(4px);}
+.asset-card:nth-child(1){border-left-color:var(--accent-gold);}
+.asset-card:nth-child(2){border-left-color:#4A7CB5;}
+.asset-card:nth-child(3){border-left-color:#7A9E8A;}
+.asset-card:nth-child(4){border-left-color:#9A8ABA;}
+.asset-card-icon{position:absolute;top:0.75rem;right:0.75rem;width:28px;height:28px;color:var(--text-muted);opacity:0.5;}
+.asset-title{font-family:var(--font-body);font-size:clamp(0.65rem,1.1vw,0.8rem);font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-primary);}
+.asset-list{list-style:none;display:flex;flex-direction:column;gap:0.25rem;}
+.asset-list li{font-size:clamp(0.65rem,1.1vw,0.8rem);font-weight:300;color:var(--text-secondary);line-height:1.4;}
+.asset-list li::before{content:'→ ';color:var(--accent-gold);}
+.s10-footer{flex-shrink:0;text-align:center;}
+.s10-footer p{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.7rem,1.3vw,0.9rem);color:var(--text-muted);}
+
+/* ============================================================
+   SEÇÃO 11 — O COMPROMISSO DO SUCESSO
+   ============================================================ */
+#s11{
+  background:radial-gradient(ellipse at 50% 50%,var(--bg-surface) 0%,var(--bg-primary) 70%);
+}
+.s11-layout{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;height:100%;
+  padding:var(--slide-padding);padding-top:calc(var(--slide-padding) + 4.5rem);
+  gap:clamp(0.75rem,1.5vw,1.5rem);overflow:hidden;
+}
+.s11-header{text-align:center;}
+.s11-header h2{font-family:var(--font-display);font-weight:700;font-size:var(--h2-size);color:var(--text-primary);}
+.s11-header p{font-size:var(--body-size);font-weight:300;color:var(--accent-gold);}
+.commitments{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  width:100%;max-width:900px;
+}
+.commitment-item{
+  padding:clamp(0.75rem,1.5vw,1.5rem);
+  border-right:1px solid var(--accent-gold);
+  display:flex;flex-direction:column;gap:0.5rem;
+}
+.commitment-item:last-child{border-right:none;}
+.commitment-roman{font-family:var(--font-display);font-size:clamp(1.5rem,3.5vw,2.5rem);font-weight:900;color:var(--accent-gold);opacity:0.4;line-height:1;}
+.commitment-label{font-family:var(--font-body);font-size:clamp(0.65rem,1vw,0.8rem);font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-primary);}
+.commitment-text{font-size:clamp(0.65rem,1.1vw,0.8rem);font-weight:300;line-height:1.5;color:var(--text-secondary);}
+.s11-quote{text-align:center;max-width:600px;}
+.s11-quote p{font-family:var(--font-quote);font-style:italic;font-size:clamp(0.75rem,1.4vw,1rem);color:var(--text-secondary);}
+
+/* ============================================================
+   SEÇÃO 12 — CTA FINAL
+   ============================================================ */
+#s12{
+  background:var(--bg-primary);
+  justify-content:center;align-items:center;
+}
+.s12-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 30% 70%,rgba(201,169,110,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse at 70% 30%,rgba(42,58,92,0.4) 0%,transparent 60%);
+}
+.s12-content{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  align-items:center;text-align:center;
+  padding:var(--slide-padding);padding-top:calc(var(--slide-padding) + 4rem);
+  gap:clamp(0.75rem,1.5vw,1.5rem);
+  max-width:min(90vw,800px);overflow:hidden;
+}
+.s12-question{
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(1.5rem,4.5vw,3.5rem);
+  line-height:1.05;color:var(--text-primary);
+}
+.s12-question em{color:var(--accent-gold);font-style:normal;}
+.s12-desc{font-size:var(--body-size);font-weight:300;line-height:1.6;color:var(--text-secondary);max-width:560px;}
+.next-steps{display:flex;flex-direction:column;gap:clamp(0.4rem,0.8vw,0.75rem);width:100%;max-width:500px;text-align:left;}
+.next-step{
+  display:grid;grid-template-columns:2rem 1fr;
+  gap:0.75rem;align-items:baseline;
+  font-size:clamp(0.7rem,1.3vw,0.9rem);font-weight:300;color:var(--text-secondary);
+}
+.next-step span:first-child{font-family:var(--font-display);font-weight:700;color:var(--accent-gold);font-size:clamp(0.9rem,1.5vw,1.1rem);}
+.cta-btn{
+  margin-top:0.5rem;
+  padding:clamp(0.65rem,1.5vw,1rem) clamp(1.5rem,3vw,2.5rem);
+  background:transparent;border:1.5px solid var(--accent-gold);
+  color:var(--accent-gold);border-radius:3px;
+  font-family:var(--font-body);font-size:clamp(0.65rem,1vw,0.8rem);
+  font-weight:600;letter-spacing:0.25em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.3s ease;
+}
+.cta-btn:hover{background:var(--accent-gold);color:#0A0D14;}
+.s12-footer{
+  position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);
+  font-size:clamp(0.55rem,0.9vw,0.68rem);font-weight:300;
+  letter-spacing:0.1em;color:var(--text-muted);white-space:nowrap;
+}
+
+/* === UTILITY === */
+.section-divider{width:100%;height:1px;background:linear-gradient(to right,transparent,var(--border-subtle),transparent);margin:0;}
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- FIXED HEADER -->
+<header id="site-header">
+  <div class="logo">RD Medicine</div>
+  <div class="cycle">Ciclo Estratégico 12 Meses</div>
+</header>
+
+<!-- DOT NAVIGATION -->
+<nav id="dot-nav" aria-label="Navegação por seções">
+  <div class="dot active" data-index="0" data-label="01 · Capa" tabindex="0" role="button" aria-label="Ir para Capa"></div>
+  <div class="dot" data-index="1" data-label="02 · Crescimento" tabindex="0" role="button"></div>
+  <div class="dot" data-index="2" data-label="03 · Metodologia" tabindex="0" role="button"></div>
+  <div class="dot" data-index="3" data-label="04 · Liderança Exec." tabindex="0" role="button"></div>
+  <div class="dot" data-index="4" data-label="05 · Alinhamento" tabindex="0" role="button"></div>
+  <div class="dot" data-index="5" data-label="06 · Ecossistema RD" tabindex="0" role="button"></div>
+  <div class="dot" data-index="6" data-label="07 · LABrand" tabindex="0" role="button"></div>
+  <div class="dot" data-index="7" data-label="08 · Roadmap S1" tabindex="0" role="button"></div>
+  <div class="dot" data-index="8" data-label="09 · Roadmap S2" tabindex="0" role="button"></div>
+  <div class="dot" data-index="9" data-label="10 · Ativos" tabindex="0" role="button"></div>
+  <div class="dot" data-index="10" data-label="11 · Compromisso" tabindex="0" role="button"></div>
+  <div class="dot" data-index="11" data-label="12 · Próximos Passos" tabindex="0" role="button"></div>
+</nav>
+
+<!-- ============================================================
+     SEÇÃO 01 — HERO / CAPA
+     ============================================================ -->
+<section class="slide" id="s01" aria-label="Capa">
+  <div class="hero-mesh decorative"></div>
+  <div class="hero-content">
+    <p class="section-label reveal">Apresentação Estratégica</p>
+    <h1 class="hero-main-title reveal reveal-delay-1">
+      <span>RD</span>
+      <span>MEDICINE:</span>
+    </h1>
+    <p class="hero-sub reveal reveal-delay-2">O Próximo Nível</p>
+    <div class="gold-line reveal reveal-delay-3"></div>
+    <p class="hero-descriptor reveal reveal-delay-3">Construção de Brand Equity e Crescimento Sustentável</p>
+    <p class="hero-cycle reveal reveal-delay-4">Ciclo Estratégico de 12 Meses</p>
+  </div>
+  <div class="scroll-arrow decorative" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 02 — CRESCER RÁPIDO EXIGE SUSTENTAÇÃO ESTRATÉGICA
+     ============================================================ -->
+<section class="slide" id="s02" aria-label="Crescimento Estratégico">
+  <div class="s02-layout">
+    <div class="s02-left">
+      <p class="section-label reveal">02</p>
+      <h2 class="reveal reveal-delay-1">Crescer Rápido Exige Sustentação Estratégica</h2>
+      <div class="quote-block reveal reveal-delay-2">
+        <p>"Velocidade sem estrutura destrói o ativo que você está tentando construir."</p>
+      </div>
+    </div>
+    <div class="s02-right">
+      <div class="s02-point reveal reveal-delay-1">
+        <span class="s02-num">01</span>
+        <p class="s02-text">O crescimento acelerado sem <strong>governança de marca</strong> cria inconsistência percebida — o público não consegue consolidar uma imagem clara do que a marca representa.</p>
+      </div>
+      <div class="s02-point reveal reveal-delay-2">
+        <span class="s02-num">02</span>
+        <p class="s02-text">Marcas que escalam rapidamente sem <strong>brand equity sólido</strong> tornam-se reféns de investimento contínuo em mídia — sem marca forte, o crescimento para quando o orçamento para.</p>
+      </div>
+      <div class="s02-point reveal reveal-delay-3">
+        <span class="s02-num">03</span>
+        <p class="s02-text">A <strong>diferenciação sustentável</strong> em medicina vem da reputação — e reputação é um ativo que se constrói com consistência, não com campanhas pontuais.</p>
+      </div>
+      <div class="s02-point reveal reveal-delay-4">
+        <span class="s02-num">04</span>
+        <p class="s02-text">O mercado médico está em <strong>consolidação de autoridade</strong>: quem não constrói posicionamento agora cederá espaço para concorrentes que o fazem de forma deliberada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 03 — METODOLOGIA BRAND FOR EQUITY
+     ============================================================ -->
+<section class="slide" id="s03" aria-label="Metodologia Brand for Equity">
+  <div class="s03-header">
+    <p class="section-label reveal">03 · Metodologia</p>
+    <h2 class="reveal reveal-delay-1">Brand for Equity</h2>
+    <p class="reveal reveal-delay-2">Quatro fases integradas para construção de ativo de marca duradouro</p>
+    <div class="gold-line gold-line-center reveal reveal-delay-2"></div>
+  </div>
+  <div class="s03-cards">
+    <div class="method-card reveal reveal-delay-1">
+      <div class="method-num">01</div>
+      <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <p class="method-label">Fase 01</p>
+      <h3 class="method-title">Leitura</h3>
+      <p class="method-desc">Diagnóstico profundo do ecossistema de marca: percepções internas e externas, gaps de posicionamento, análise competitiva e mapeamento de oportunidades de equity.</p>
+    </div>
+    <div class="method-card reveal reveal-delay-2">
+      <div class="method-num">02</div>
+      <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <p class="method-label">Fase 02</p>
+      <h3 class="method-title">Ativos</h3>
+      <p class="method-desc">Construção e formalização dos ativos estratégicos: brand book, arquitetura de marca, sistemas visuais e verbais, territórios de comunicação e propriedades de marca.</p>
+    </div>
+    <div class="method-card reveal reveal-delay-3">
+      <div class="method-num">03</div>
+      <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+      <p class="method-label">Fase 03</p>
+      <h3 class="method-title">Ativação</h3>
+      <p class="method-desc">Implementação e ativação da marca em todos os pontos de contato: digital, físico, relações públicas, conteúdo e experiência do paciente — com coerência e impacto máximo.</p>
+    </div>
+    <div class="method-card reveal reveal-delay-4">
+      <div class="method-num">04</div>
+      <svg class="method-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <p class="method-label">Fase 04</p>
+      <h3 class="method-title">Governança</h3>
+      <p class="method-desc">Estruturação da governança de marca: processos internos, rituais de alinhamento, sistemas de controle de qualidade e frameworks para tomada de decisão baseada em marca.</p>
+    </div>
+  </div>
+  <div class="s03-footer reveal">
+    <p>"Metodologia proprietária desenvolvida para o contexto da medicina de alta performance — onde reputação é o ativo mais valioso."</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 04 — LIDERANÇA EXECUTIVA: SANDRO SERZEDELLO
+     ============================================================ -->
+<section class="slide" id="s04" aria-label="Liderança Executiva">
+  <div class="s04-layout">
+    <div class="s04-left">
+      <p class="section-label reveal">04 · Liderança Executiva</p>
+      <p class="reveal reveal-delay-1" style="font-family:var(--font-body);font-size:clamp(0.6rem,1vw,0.72rem);font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent-gold);">Brand Equity Constructor</p>
+      <h2 class="reveal reveal-delay-2">Sandro Serzedello</h2>
+      <p class="reveal reveal-delay-2" style="font-size:var(--body-size);font-weight:300;line-height:1.6;color:var(--text-secondary);">Estrategista de marca com trajetória dedicada à construção de equity em contextos de alta complexidade. Especialização na intersecção entre posicionamento institucional, liderança de mercado e valor percebido sustentável.</p>
+      <div class="s04-pillars reveal reveal-delay-3">
+        <div class="s04-pillar">
+          <h4>Expertise</h4>
+          <p>Brand strategy aplicada ao setor de saúde e medicina de alto desempenho — construção de autoridade e diferenciação de longo prazo.</p>
+        </div>
+        <div class="s04-pillar">
+          <h4>Método</h4>
+          <p>Abordagem sistêmica que integra diagnóstico, construção de ativos, ativação e governança em ciclos mensuráveis de crescimento de equity.</p>
+        </div>
+        <div class="s04-pillar">
+          <h4>Resultado</h4>
+          <p>Marcas que se tornam ativos financeiros reais — com valor independente do investimento contínuo em mídia e comunicação.</p>
+        </div>
+      </div>
+    </div>
+    <div class="s04-right">
+      <div class="reveal-scale">
+        <div class="s04-circle-wrap">
+          <div class="s04-circle-bg"></div>
+          <div class="s04-circle-text">
+            <span>Brand Equity</span>
+            <span>Constructor</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="s04-quote reveal">
+    <p>"A marca é o único ativo que aprecia com o tempo — mas apenas quando construída com intenção estratégica e consistência executiva."</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 05 — LIDERANÇA INTEGRADA E ALINHAMENTO EXECUTIVO
+     ============================================================ -->
+<section class="slide" id="s05" aria-label="Liderança Integrada">
+  <div class="s05-layout">
+    <div class="s05-title">
+      <p class="section-label reveal">05 · Alinhamento Executivo</p>
+      <h2 class="reveal reveal-delay-1">Liderança Integrada</h2>
+    </div>
+    <div class="spoke-diagram reveal-scale">
+      <svg class="spoke-lines" viewBox="0 0 500 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <!-- Lines from center to nodes -->
+        <line x1="250" y1="210" x2="250" y2="60" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="250" y1="210" x2="440" y2="210" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="250" y1="210" x2="250" y2="360" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <line x1="250" y1="210" x2="60" y2="210" stroke="rgba(201,169,110,0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      </svg>
+      <!-- Center node -->
+      <div class="spoke-center">
+        <span>Sandro</span>
+        <span>Serzedello</span>
+      </div>
+      <!-- Top: BOARD -->
+      <div class="spoke-node" data-pos="top">
+        <span class="spoke-node-label">BOARD</span>
+        <div class="spoke-node-desc">Alinhamento estratégico com o conselho e liderança da organização. Garantia de que a marca reflete as ambições institucionais de longo prazo.</div>
+      </div>
+      <!-- Right: PR & ASSESSORIA -->
+      <div class="spoke-node" data-pos="right">
+        <span class="spoke-node-label">PR &amp;<br>ASSESSORIA</span>
+        <div class="spoke-node-desc">Coordenação de relacionamentos com mídia, formadores de opinião e stakeholders externos para amplificação consistente da narrativa de marca.</div>
+      </div>
+      <!-- Bottom: AGÊNCIA -->
+      <div class="spoke-node" data-pos="bottom">
+        <span class="spoke-node-label">AGÊNCIA</span>
+        <div class="spoke-node-desc">Briefing e supervisão criativa da produção de conteúdo e campanhas, garantindo aderência ao posicionamento e aos ativos de marca construídos.</div>
+      </div>
+      <!-- Left: MARKETING -->
+      <div class="spoke-node" data-pos="left">
+        <span class="spoke-node-label">MARKETING</span>
+        <div class="spoke-node-desc">Integração do time interno de marketing à estratégia de brand equity — capacitação, processos e alinhamento tático-estratégico contínuo.</div>
+      </div>
+    </div>
+    <p class="s05-quote reveal">"Um ecossistema de comunicação só funciona como sistema quando há um maestro que conhece a partitura inteira."</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 06 — ECOSSISTEMA RD
+     ============================================================ -->
+<section class="slide" id="s06" aria-label="Ecossistema RD">
+  <div class="s06-header">
+    <p class="section-label reveal">06 · Ecossistema</p>
+    <h2 class="reveal reveal-delay-1">Ecossistema RD</h2>
+    <p class="reveal reveal-delay-2">Sincronia entre Institucional, Produto e Pessoal</p>
+    <div class="gold-line gold-line-center reveal reveal-delay-2"></div>
+  </div>
+  <div class="eco-grid" style="padding-bottom:0;">
+    <div class="eco-card reveal reveal-delay-1">
+      <svg class="eco-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <p class="eco-role">Marca Institucional</p>
+      <h3 class="eco-name">RD Medicine</h3>
+      <p class="eco-desc">A marca guarda-chuva que representa a clínica e seus valores institucionais. Âncora de confiança e referência para todos os demais elementos do ecossistema.</p>
+    </div>
+    <div class="eco-card reveal reveal-delay-2">
+      <svg class="eco-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </svg>
+      <p class="eco-role">Marca de Produto</p>
+      <h3 class="eco-name">RD Residência</h3>
+      <p class="eco-desc">Produto premium de formação médica com posicionamento próprio — conectado ao equity institucional mas com personalidade e arquitetura de marca distintas.</p>
+    </div>
+    <div class="eco-card reveal reveal-delay-3">
+      <svg class="eco-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      <p class="eco-role">Marca Pessoal</p>
+      <h3 class="eco-name">Rafael Duarte</h3>
+      <p class="eco-desc">A marca pessoal do médico fundador — autoridade clínica, referência de excelência e principal veículo de construção de credibilidade institucional.</p>
+    </div>
+    <div class="eco-card reveal reveal-delay-4">
+      <svg class="eco-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      <p class="eco-role">Marca Pessoal</p>
+      <h3 class="eco-name">Rute Duarte</h3>
+      <p class="eco-desc">Marca pessoal complementar que amplia o alcance e a representatividade do ecossistema, adicionando dimensões únicas de autoridade e conexão com públicos específicos.</p>
+    </div>
+  </div>
+  <div class="s06-footer reveal">
+    <p>"4 motores operando como um sistema único — onde cada marca amplifica as demais em vez de competir por atenção."</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 07 — LABrand: O CÉREBRO DA OPERAÇÃO
+     ============================================================ -->
+<section class="slide" id="s07" aria-label="LABrand">
+  <div class="s07-bg decorative"></div>
+  <div class="s07-layout">
+    <div class="s07-left">
+      <p class="section-label reveal">07 · Infraestrutura</p>
+      <span class="s07-activation reveal reveal-delay-1">Ativação Imediata</span>
+      <h2 class="reveal reveal-delay-2">LABrand: O Cérebro da Operação</h2>
+      <p class="s07-desc reveal reveal-delay-3">Plataforma proprietária de gestão de brand equity — o sistema operacional que transforma estratégia em execução mensurável, com visibilidade em tempo real de todos os indicadores de marca.</p>
+      <div class="labrand-caps reveal reveal-delay-3">
+        <div class="labrand-cap">
+          <svg class="labrand-cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <div class="labrand-cap-text">
+            <strong>Dashboard de Brand Equity</strong>
+            <span>Monitoramento em tempo real dos KPIs de marca — percepção, consistência, alcance e diferenciação</span>
+          </div>
+        </div>
+        <div class="labrand-cap">
+          <svg class="labrand-cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div class="labrand-cap-text">
+            <strong>Central de Ativos</strong>
+            <span>Repositório centralizado de todos os ativos de marca — acessível a qualquer stakeholder, com controle de versão e aprovação</span>
+          </div>
+        </div>
+        <div class="labrand-cap">
+          <svg class="labrand-cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <div class="labrand-cap-text">
+            <strong>Roadmap Estratégico</strong>
+            <span>Visibilidade completa do progresso das ondas de implementação, marcos e entregáveis do ciclo de 12 meses</span>
+          </div>
+        </div>
+        <div class="labrand-cap">
+          <svg class="labrand-cap-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          <div class="labrand-cap-text">
+            <strong>Governança Colaborativa</strong>
+            <span>Fluxos de aprovação, alinhamento entre equipes e registro de decisões estratégicas — sem ruído, sem retrabalho</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s07-right">
+      <!-- HTML/CSS Dashboard Mockup -->
+      <div class="dashboard-mock reveal-scale">
+        <div class="dash-header">
+          <div class="dash-dots"><div class="dash-dot r"></div><div class="dash-dot y"></div><div class="dash-dot g"></div></div>
+          <span class="dash-title">LABrand · RD Medicine Dashboard</span>
+        </div>
+        <div class="dash-body">
+          <div class="dash-sidebar">
+            <div class="dash-nav-item active">◈ &nbsp;Brand Overview</div>
+            <div class="dash-nav-item">◫ &nbsp;Ativos</div>
+            <div class="dash-nav-item">◱ &nbsp;Roadmap</div>
+            <div class="dash-nav-item">◳ &nbsp;Conteúdo</div>
+            <div class="dash-nav-item">◻ &nbsp;Analytics</div>
+            <div class="dash-nav-item">◼ &nbsp;Governança</div>
+          </div>
+          <div class="dash-main">
+            <div class="dash-row">
+              <div class="dash-card-sm">
+                <div class="label">Brand Score</div>
+                <div class="val">74<span style="font-size:0.5rem;color:var(--text-muted)">/100</span></div>
+                <div class="sub">↑ +12 este ciclo</div>
+              </div>
+              <div class="dash-card-sm">
+                <div class="label">Ativos Ativos</div>
+                <div class="val">48</div>
+                <div class="sub">↑ 6 novos</div>
+              </div>
+              <div class="dash-card-sm">
+                <div class="label">Progresso</div>
+                <div class="val">67<span style="font-size:0.5rem;color:var(--text-muted)">%</span></div>
+                <div class="sub">Onda 02</div>
+              </div>
+            </div>
+            <div class="dash-progress">
+              <div class="label">Consistência por Touchpoint</div>
+              <div style="margin-bottom:0.3rem;">
+                <div class="dash-bar-label"><span style="font-size:0.5rem;color:var(--text-secondary)">Digital</span><span style="font-size:0.5rem;color:var(--accent-gold)">89%</span></div>
+                <div class="dash-bar-wrap"><div class="dash-bar" style="width:89%"></div></div>
+              </div>
+              <div style="margin-bottom:0.3rem;">
+                <div class="dash-bar-label"><span style="font-size:0.5rem;color:var(--text-secondary)">Institucional</span><span style="font-size:0.5rem;color:var(--accent-gold)">72%</span></div>
+                <div class="dash-bar-wrap"><div class="dash-bar" style="width:72%"></div></div>
+              </div>
+              <div>
+                <div class="dash-bar-label"><span style="font-size:0.5rem;color:var(--text-secondary)">Presencial</span><span style="font-size:0.5rem;color:var(--accent-gold)">61%</span></div>
+                <div class="dash-bar-wrap"><div class="dash-bar" style="width:61%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 08 — ROADMAP SEMESTRE 01
+     ============================================================ -->
+<section class="slide" id="s08" aria-label="Roadmap Semestre 01">
+  <div class="s08-layout">
+    <div class="roadmap-header">
+      <p class="section-label reveal">08 · Roadmap</p>
+      <h2 class="reveal reveal-delay-1">Semestre 01 — Fundação &amp; Construção</h2>
+    </div>
+    <div class="timeline-wrap reveal reveal-delay-2">
+      <div class="timeline-line"></div>
+      <div class="timeline-months">
+        <!-- Mês 1 -->
+        <div class="timeline-month">
+          <div class="tm-card-top">
+            <span class="tm-badge fundacao">FUNDAÇÃO</span>
+            <div class="tm-card-title">Mês 1</div>
+            <div class="tm-card-text">Diagnóstico e leitura de marca. Imersão cultural e mapeamento de percepções internas e externas.</div>
+          </div>
+          <div class="tm-month-num">01</div>
+          <div style="flex:1"></div>
+        </div>
+        <!-- Mês 2 -->
+        <div class="timeline-month">
+          <div style="flex:1"></div>
+          <div class="tm-month-num">02</div>
+          <div class="tm-card-bot">
+            <span class="tm-badge fundacao">FUNDAÇÃO</span>
+            <div class="tm-card-title">Mês 2</div>
+            <div class="tm-card-text">Definição de posicionamento, arquitetura de marca e identidade verbal. Propriedades e territórios.</div>
+          </div>
+        </div>
+        <!-- Mês 3 -->
+        <div class="timeline-month">
+          <div class="tm-card-top">
+            <span class="tm-badge fundacao">FUNDAÇÃO</span>
+            <div class="tm-card-title">Mês 3</div>
+            <div class="tm-card-text">Construção do brand book e sistema visual. Validação interna e kick-off de ativação.</div>
+          </div>
+          <div class="tm-month-num">03</div>
+          <div style="flex:1"></div>
+        </div>
+        <!-- Mês 4 -->
+        <div class="timeline-month">
+          <div style="flex:1"></div>
+          <div class="tm-month-num">04</div>
+          <div class="tm-card-bot">
+            <span class="tm-badge construcao">CONSTRUÇÃO</span>
+            <div class="tm-card-title">Mês 4</div>
+            <div class="tm-card-text">Ativação digital: redesign de presença, conteúdo estratégico, calendário editorial alinhado à marca.</div>
+          </div>
+        </div>
+        <!-- Mês 5 -->
+        <div class="timeline-month">
+          <div class="tm-card-top">
+            <span class="tm-badge construcao">CONSTRUÇÃO</span>
+            <div class="tm-card-title">Mês 5</div>
+            <div class="tm-card-text">Ativação institucional: materiais, ambiente físico, experiência do paciente e comunicação interna.</div>
+          </div>
+          <div class="tm-month-num">05</div>
+          <div style="flex:1"></div>
+        </div>
+        <!-- Mês 6 -->
+        <div class="timeline-month">
+          <div style="flex:1"></div>
+          <div class="tm-month-num">06</div>
+          <div class="tm-card-bot">
+            <span class="tm-badge construcao">CONSTRUÇÃO</span>
+            <div class="tm-card-title">Mês 6</div>
+            <div class="tm-card-text">Avaliação de resultados da Onda 1–2, ajustes estratégicos e preparação para o semestre 2.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap-result reveal reveal-delay-3">
+      <p><strong>Resultado esperado S1:</strong> Marca fundamentada com ativos construídos, presença digital ativada e equipe alinhada — base sólida para escala de equity no segundo semestre.</p>
+    </div>
+    <p class="roadmap-quote reveal">"O primeiro semestre é sobre construir o que vai durar — não sobre fazer barulho."</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 09 — ROADMAP SEMESTRE 02
+     ============================================================ -->
+<section class="slide" id="s09" aria-label="Roadmap Semestre 02">
+  <div class="s08-layout">
+    <div class="roadmap-header">
+      <p class="section-label reveal">09 · Roadmap</p>
+      <h2 class="reveal reveal-delay-1">Semestre 02 — Ativação &amp; Governança</h2>
+    </div>
+    <div class="timeline-wrap reveal reveal-delay-2">
+      <div class="timeline-line" style="background:linear-gradient(to right,rgba(201,169,110,0.3) 0%,var(--accent-gold) 100%)"></div>
+      <div class="timeline-months">
+        <!-- Mês 7 -->
+        <div class="timeline-month">
+          <div class="tm-card-top">
+            <span class="tm-badge ativacao">ATIVAÇÃO</span>
+            <div class="tm-card-title">Mês 7</div>
+            <div class="tm-card-text">Relações públicas e assessoria de imprensa. Posicionamento em mídia especializada e autoridade externa.</div>
+          </div>
+          <div class="tm-month-num">07</div>
+          <div style="flex:1"></div>
+        </div>
+        <!-- Mês 8 -->
+        <div class="timeline-month">
+          <div style="flex:1"></div>
+          <div class="tm-month-num">08</div>
+          <div class="tm-card-bot">
+            <span class="tm-badge ativacao">ATIVAÇÃO</span>
+            <div class="tm-card-title">Mês 8</div>
+            <div class="tm-card-text">Ativação do ecossistema de marcas pessoais. Alinhamento entre as 4 entidades do ecossistema RD.</div>
+          </div>
+        </div>
+        <!-- Mês 9 -->
+        <div class="timeline-month">
+          <div class="tm-card-top">
+            <span class="tm-badge ativacao">ATIVAÇÃO</span>
+            <div class="tm-card-title">Mês 9</div>
+            <div class="tm-card-text">Campanhas de autoridade, eventos e experiências premium de marca. Amplificação de equity conquistado.</div>
+          </div>
+          <div class="tm-month-num">09</div>
+          <div style="flex:1"></div>
+        </div>
+        <!-- Mês 10 -->
+        <div class="timeline-month">
+          <div style="flex:1"></div>
+          <div class="tm-month-num">10</div>
+          <div class="tm-card-bot">
+            <span class="tm-badge governanca">GOVERNANÇA</span>
+            <div class="tm-card-title">Mês 10</div>
+            <div class="tm-card-text">Implantação da governança de marca: processos, rituais e frameworks para autonomia estratégica interna.</div>
+          </div>
+        </div>
+        <!-- Mês 11 -->
+        <div class="timeline-month">
+          <div class="tm-card-top">
+            <span class="tm-badge governanca">GOVERNANÇA</span>
+            <div class="tm-card-title">Mês 11</div>
+            <div class="tm-card-text">Capacitação da equipe interna e transferência de conhecimento. Brand guardianship como cultura.</div>
+          </div>
+          <div class="tm-month-num">11</div>
+          <div style="flex:1"></div>
+        </div>
+        <!-- Mês 12 -->
+        <div class="timeline-month">
+          <div style="flex:1"></div>
+          <div class="tm-month-num">12</div>
+          <div class="tm-card-bot">
+            <span class="tm-badge governanca">GOVERNANÇA</span>
+            <div class="tm-card-title">Mês 12</div>
+            <div class="tm-card-text">Avaliação final de equity, brand audit completo e planejamento do próximo ciclo estratégico.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="roadmap-result reveal reveal-delay-3" style="border-color:rgba(201,169,110,0.6)">
+      <p><strong>Resultado esperado S2:</strong> Marca ativada com presença consolidada, ecossistema sincronizado e governança interna estabelecida — equity como ativo real e mensurável da organização.</p>
+    </div>
+    <p class="roadmap-quote reveal">"O segundo semestre é sobre colher o que foi plantado — e garantir que a colheita continue por anos."</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 10 — ATIVOS ESTRATÉGICOS QUE FICAM NA EMPRESA
+     ============================================================ -->
+<section class="slide" id="s10" aria-label="Ativos Estratégicos">
+  <div class="s10-layout">
+    <div class="s10-header">
+      <p class="section-label reveal">10 · Entregáveis</p>
+      <h2 class="reveal reveal-delay-1">Ativos Estratégicos Que Ficam na Empresa</h2>
+      <div class="gold-line reveal reveal-delay-2"></div>
+    </div>
+    <div class="assets-grid">
+      <div class="asset-card reveal reveal-delay-1">
+        <svg class="asset-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+        </svg>
+        <h3 class="asset-title">Estratégia &amp; Posicionamento</h3>
+        <ul class="asset-list">
+          <li>Diagnóstico de brand equity (relatório completo)</li>
+          <li>Plataforma de posicionamento e proposta de valor</li>
+          <li>Arquitetura de marca e hierarquia do ecossistema</li>
+          <li>Mapa de concorrência e oportunidades de diferenciação</li>
+        </ul>
+      </div>
+      <div class="asset-card reveal reveal-delay-2">
+        <svg class="asset-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+        </svg>
+        <h3 class="asset-title">Identidade &amp; Sistema Visual</h3>
+        <ul class="asset-list">
+          <li>Brand book completo e manual de identidade visual</li>
+          <li>Sistema de cores, tipografia e elementos gráficos</li>
+          <li>Biblioteca de templates e aplicações</li>
+          <li>Guia de identidade verbal e tom de voz</li>
+        </ul>
+      </div>
+      <div class="asset-card reveal reveal-delay-3">
+        <svg class="asset-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5a19.79 19.79 0 01-3.07-8.7A2 2 0 012 .84h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        <h3 class="asset-title">Comunicação &amp; Conteúdo</h3>
+        <ul class="asset-list">
+          <li>Estratégia de conteúdo e calendário editorial anual</li>
+          <li>Framework de storytelling e narrativas de marca</li>
+          <li>Biblioteca de conteúdo pillar por público</li>
+          <li>Guias de comunicação para cada touchpoint</li>
+        </ul>
+      </div>
+      <div class="asset-card reveal reveal-delay-4">
+        <svg class="asset-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <h3 class="asset-title">Governança &amp; Processos</h3>
+        <ul class="asset-list">
+          <li>Sistema de governança de marca (LABrand)</li>
+          <li>Processos e rituais de alinhamento estratégico</li>
+          <li>Treinamento e capacitação do time interno</li>
+          <li>Framework de medição de brand equity contínuo</li>
+        </ul>
+      </div>
+    </div>
+    <div class="s10-footer reveal">
+      <p>"Ao final do ciclo, a empresa possui ativos de marca que trabalham por ela — independente de qualquer fornecedor externo."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 11 — O COMPROMISSO DO SUCESSO
+     ============================================================ -->
+<section class="slide" id="s11" aria-label="O Compromisso do Sucesso">
+  <div class="s11-layout">
+    <div class="s11-header">
+      <p class="section-label reveal">11 · Compromisso</p>
+      <h2 class="reveal reveal-delay-1">O Compromisso do Sucesso</h2>
+      <p class="reveal reveal-delay-2">O que garante que o ciclo entrega resultados reais</p>
+      <div class="gold-line gold-line-center reveal reveal-delay-2"></div>
+    </div>
+    <div class="commitments">
+      <div class="commitment-item reveal reveal-delay-1">
+        <div class="commitment-roman">I</div>
+        <div class="commitment-label">Decisores</div>
+        <p class="commitment-text">Acesso direto e compromisso ativo da liderança da organização — sem brand strategy com autonomia do board, o ciclo perde impacto. O sucesso começa no topo.</p>
+      </div>
+      <div class="commitment-item reveal reveal-delay-2">
+        <div class="commitment-roman">II</div>
+        <div class="commitment-label">Dados</div>
+        <p class="commitment-text">Disponibilidade de informações, pesquisas e indicadores que alimentam as decisões estratégicas. Marcas construídas no escuro não acertam o alvo — precisamos de inteligência.</p>
+      </div>
+      <div class="commitment-item reveal reveal-delay-3">
+        <div class="commitment-roman">III</div>
+        <div class="commitment-label">Interface</div>
+        <p class="commitment-text">Um ponto focal interno dedicado — alguém que faz a ponte entre o time estratégico externo e as operações internas. A execução exige um guardião da marca dentro da organização.</p>
+      </div>
+      <div class="commitment-item reveal reveal-delay-4">
+        <div class="commitment-roman">IV</div>
+        <div class="commitment-label">Foco</div>
+        <p class="commitment-text">Comprometimento com o processo completo — 12 meses de consistência, sem desvios táticos que comprometam a visão estratégica. Brand equity exige paciência e disciplina.</p>
+      </div>
+    </div>
+    <div class="s11-quote reveal">
+      <p>"O compromisso não é só nosso — é uma parceria. Quando ambos os lados entregam, o resultado supera qualquer projeção."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SEÇÃO 12 — CTA FINAL / PRÓXIMOS PASSOS
+     ============================================================ -->
+<section class="slide" id="s12" aria-label="Próximos Passos">
+  <div class="s12-bg decorative"></div>
+  <div class="s12-content">
+    <p class="section-label reveal">12 · Decisão</p>
+    <h2 class="s12-question reveal reveal-delay-1">
+      Construir Ativo ou Apenas<br>Comprar <em>Crescimento?</em>
+    </h2>
+    <div class="gold-line gold-line-center reveal reveal-delay-2"></div>
+    <p class="s12-desc reveal reveal-delay-2">Mídia paga compra atenção. Brand equity constrói valor. A pergunta que toda organização médica de alto desempenho precisa responder é: quando você parar de investir em mídia, o que sobra? A resposta a essa pergunta define se você está construindo um ativo ou apenas alugando crescimento.</p>
+    <div class="next-steps">
+      <div class="next-step reveal reveal-delay-1">
+        <span>01</span>
+        <span>Reunião de alinhamento estratégico com a liderança da RD Medicine para apresentação detalhada da metodologia</span>
+      </div>
+      <div class="next-step reveal reveal-delay-2">
+        <span>02</span>
+        <span>Proposta comercial personalizada com escopo, cronograma e investimento do Ciclo Estratégico de 12 Meses</span>
+      </div>
+      <div class="next-step reveal reveal-delay-3">
+        <span>03</span>
+        <span>Workshop de imersão inicial com o board para calibrar ambições, expectativas e acordos de governança</span>
+      </div>
+      <div class="next-step reveal reveal-delay-4">
+        <span>04</span>
+        <span>Kick-off oficial e ativação imediata do LABrand — o ciclo começa quando a decisão é tomada</span>
+      </div>
+    </div>
+    <button class="cta-btn reveal reveal-delay-5" type="button" onclick="document.getElementById('s01').scrollIntoView({behavior:'smooth'})">Iniciar o Ciclo</button>
+  </div>
+  <div class="s12-footer">RD Medicine × Sandro Serzedello &nbsp;|&nbsp; Ciclo Estratégico 12 Meses</div>
+</section>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  /* === INTERSECTION OBSERVER — SCROLL REVEAL === */
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+  /* === PROGRESS BAR === */
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* === DOT NAVIGATION === */
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('#dot-nav .dot');
+
+  // Scroll to slide when dot clicked
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.index, 10);
+      slides[idx].scrollIntoView({ behavior: 'smooth' });
+    });
+    dot.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const idx = parseInt(dot.dataset.index, 10);
+        slides[idx].scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Active dot via IntersectionObserver
+  const slideObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = Array.from(slides).indexOf(entry.target);
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[idx]) dots[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(s => slideObserver.observe(s));
+
+  /* === KEYBOARD NAVIGATION === */
+  document.addEventListener('keydown', (e) => {
+    const current = Array.from(slides).findIndex(s => {
+      const rect = s.getBoundingClientRect();
+      return rect.top >= -window.innerHeight / 2 && rect.top <= window.innerHeight / 2;
+    });
+
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault();
+      const next = Math.min(current + 1, slides.length - 1);
+      slides[next].scrollIntoView({ behavior: 'smooth' });
+    }
+    if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      const prev = Math.max(current - 1, 0);
+      slides[prev].scrollIntoView({ behavior: 'smooth' });
+    }
+    if (e.key === 'Home') {
+      e.preventDefault();
+      slides[0].scrollIntoView({ behavior: 'smooth' });
+    }
+    if (e.key === 'End') {
+      e.preventDefault();
+      slides[slides.length - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+
+  /* === TOUCH / SWIPE NAVIGATION === */
+  let touchStartY = 0;
+  let touchStartTime = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dt = Date.now() - touchStartTime;
+    if (Math.abs(dy) > 50 && dt < 400) {
+      const current = Array.from(slides).findIndex(s => {
+        const rect = s.getBoundingClientRect();
+        return rect.top >= -window.innerHeight / 2 && rect.top <= window.innerHeight / 2;
+      });
+      if (dy > 0) {
+        const next = Math.min(current + 1, slides.length - 1);
+        slides[next].scrollIntoView({ behavior: 'smooth' });
+      } else {
+        const prev = Math.max(current - 1, 0);
+        slides[prev].scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, { passive: true });
+
+  /* === SPOKE DIAGRAM — Animate lines on load === */
+  const spokeSVGLines = document.querySelectorAll('.spoke-lines line');
+  spokeSVGLines.forEach((line, i) => {
+    const len = line.getTotalLength ? line.getTotalLength() : 200;
+    line.style.strokeDasharray = len;
+    line.style.strokeDashoffset = len;
+    line.style.transition = `stroke-dashoffset 0.8s ${i * 0.15}s ease`;
+  });
+
+  const spokeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        spokeSVGLines.forEach(line => {
+          line.style.strokeDashoffset = '0';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const s05 = document.getElementById('s05');
+  if (s05) spokeObserver.observe(s05);
+
+})();
+</script>
+</body>
+</html>
